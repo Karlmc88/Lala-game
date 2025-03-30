@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lala MBTI 测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f0f0; }
+        .container { width: 50%; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px gray; }
+        .question { font-size: 18px; margin-bottom: 10px; }
+        .options button { display: block; width: 100%; margin: 5px 0; padding: 10px; border: none; background: #ccc; border-radius: 5px; cursor: pointer; }
+        .options button:hover { background: #aaa; }
+        .result { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lala MBTI 测试</h1>
+        <div id="quiz">
+            <div id="questionContainer">
+                <p class="question" id="questionText">加载中...</p>
+                <div class="options" id="options"></div>
+            </div>
+            <button id="nextButton" onclick="nextQuestion()">下一题</button>
+        </div>
+        <div id="result" class="result">
+            <h2>你的Lala指数：</h2>
+            <p id="lalaResult"></p>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            { question: "你最喜欢穿什么衣服？", options: ["ADLV+黑色oversized", "Nike Tech套装", "普通T恤+短裤", "Uniqlo简约风"] },
+            { question: "你的车是什么风格？", options: ["Civic改装+LED灯", "Myvi+小改", "普通家用车", "没车"] },
+            { question: "你平常喜欢去哪里？", options: ["深夜Mamak", "Shopping Mall", "在家打机", "图书馆"] },
+            { question: "你喜欢的音乐？", options: ["DJ Remix + Douyin歌", "流行K-Pop", "华语老歌", "Lo-fi & Indie"] }
+        ];
+        
+        let currentQuestion = 0;
+        let lalaScore = 0;
+
+        function loadQuestion() {
+            document.getElementById("questionText").innerText = questions[currentQuestion].question;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            questions[currentQuestion].options.forEach((option, index) => {
+                let btn = document.createElement("button");
+                btn.innerText = option;
+                btn.onclick = function() { selectAnswer(index); };
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(index) {
+            if (index === 0) lalaScore += 3;
+            if (index === 1) lalaScore += 2;
+            if (index === 2) lalaScore += 1;
+            if (index === 3) lalaScore += 0;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("result").style.display = "block";
+            let resultText = "";
+            if (lalaScore >= 10) {
+                resultText = "你是 ✨超级Lala✨！改装车+夜生活+潮流衣装全齐！";
+            } else if (lalaScore >= 6) {
+                resultText = "你是 半Lala，某些方面有Lala风格，但没那么极端。";
+            } else {
+                resultText = "你不是Lala，普通生活风格，跟Lala没什么关系。";
+            }
+            document.getElementById("lalaResult").innerText = resultText;
+        }
+        
+        loadQuestion();
+    </script>
+</body>
+</html>
